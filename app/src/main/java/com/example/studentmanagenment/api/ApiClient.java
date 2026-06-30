@@ -4,7 +4,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient {
-    private static final String BASE_URL = "https://6a3ea4230443193a1a0c2a57.mockapi.io/students/";
+    private static final String BASE_URL = "https://studentmanagenment-default-rtdb.asia-southeast1.firebasedatabase.app/";
     private static Retrofit retrofit = null;
 
     public static ApiService getApiService() {
