@@ -1,4 +1,4 @@
-pluginManagement {
+﻿pluginManagement {
     repositories {
         google {
             content {
@@ -25,3 +25,5 @@ dependencyResolutionManagement {
 rootProject.name = "StudentManagenment"
 include(":app")
  
+
+
