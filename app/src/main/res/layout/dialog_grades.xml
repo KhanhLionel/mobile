@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/tv_grade_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Quản lý Điểm"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <EditText
+        android:id="@+id/et_diem_thanh_phan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Điểm thành phần (20%)"
+        android:inputType="numberDecimal"
+        android:layout_marginBottom="8dp" />
+
+    <EditText
+        android:id="@+id/et_diem_giua_ky"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Điểm giữa kỳ (30%)"
+        android:inputType="numberDecimal"
+        android:layout_marginBottom="8dp" />
+
+    <EditText
+        android:id="@+id/et_diem_cuoi_ky"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Điểm cuối kỳ (50%)"
+        android:inputType="numberDecimal"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:id="@+id/tv_gpa_mon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="GPA Môn: 0.0"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/holo_blue_dark"
+        android:layout_marginBottom="16dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/btn_cancel_grade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Đóng"
+            style="?android:attr/buttonBarButtonStyle" />
+
+        <Button
+            android:id="@+id/btn_save_grade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lưu (Chỉ Admin)"
+            style="?android:attr/buttonBarButtonStyle" />
+    </LinearLayout>
+</LinearLayout>
