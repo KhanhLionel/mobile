@@ -20,11 +20,19 @@
             android:exported="false" />
 
         <activity
-            android:name="com.example.studentmanagenment.ui.main.MainActivity"
-            android:exported="false" />
+            android:name=".MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+
+        <!--Quản lý điểm số và môn học-->
         <activity
-            android:name="com.example.studentmanagenment.ui.auth.SplashActivity"
+            android:name=".score_and_class.StudentScoreActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

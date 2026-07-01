@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cấu hình tỷ lệ điểm (%)"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#1E293B"
+        android:layout_marginBottom="6dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lưu ý: Tổng 3 cột điểm phải đúng bằng 100%"
+        android:textSize="12sp"
+        android:textColor="#64748B"
+        android:layout_marginBottom="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tỷ lệ điểm Quá trình:"
+        android:textSize="13sp"
+        android:textColor="#475569"
+        android:textStyle="bold"/>
+    <EditText
+        android:id="@+id/edtPercentProcess"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Ví dụ: 20"
+        android:inputType="number"
+        android:textColor="#0F172A"
+        android:textSize="15sp"
+        android:layout_marginBottom="14dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tỷ lệ điểm Giữa kỳ:"
+        android:textSize="13sp"
+        android:textColor="#475569"
+        android:textStyle="bold"/>
+    <EditText
+        android:id="@+id/edtPercentMidterm"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Ví dụ: 30"
+        android:inputType="number"
+        android:textColor="#0F172A"
+        android:textSize="15sp"
+        android:layout_marginBottom="14dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tỷ lệ điểm Cuối kỳ:"
+        android:textSize="13sp"
+        android:textColor="#475569"
+        android:textStyle="bold"/>
+    <EditText
+        android:id="@+id/edtPercentFinal"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Ví dụ: 50"
+        android:inputType="number"
+        android:textColor="#0F172A"
+        android:textSize="15sp"/>
+
+</LinearLayout>

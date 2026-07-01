@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://tools.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8FAFC"> <RelativeLayout
+    android:id="@+id/layoutHeaderSelect"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#3F51B5"
+    android:paddingHorizontal="24dp"
+    android:paddingTop="28dp"
+    android:paddingBottom="24dp"
+    android:elevation="6dp">
+
+    <TextView
+        android:id="@+id/tvSelectTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Quản Lý Điểm"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvSelectTitle"
+        android:text="Vui lòng chọn học kỳ và môn học để vào điểm"
+        android:textColor="#C5CAE9"
+        android:textSize="13sp"
+        android:layout_marginTop="4dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_marginTop="70dp"
+        android:background="#28FFFFFF"
+        android:backgroundTint="#FFFFFF"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="12dp">
+
+        <Spinner
+            android:id="@+id/spinnerSemester"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:backgroundTint="#FFFFFF"
+            android:spinnerMode="dropdown" />
+    </LinearLayout>
+</RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSelectSubjects"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/layoutHeaderSelect"
+        android:paddingHorizontal="12dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="80dp"
+        android:clipToPadding="false"
+        tools:listitem="@layout/item_subject" />
+
+</RelativeLayout>
