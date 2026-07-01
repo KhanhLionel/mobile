@@ -1,6 +1,6 @@
-plugins {
+﻿plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.google.gms.google.services)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -14,7 +14,7 @@ android {
     defaultConfig {
         applicationId = "com.example.studentmanagenment"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -38,11 +38,8 @@ dependencies {
     implementation(libs.activity.ktx)
     implementation(libs.appcompat)
     implementation(libs.constraintlayout)
-    implementation(libs.firebase.database)
     implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.ext.junit)
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")  // Dùng để tự động chuyển JSON thành Object trong Java
 }
