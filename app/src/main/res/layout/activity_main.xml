@@ -1,19 +1,47 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:background="@color/colorBackground"
+    android:orientation="vertical"
+    android:padding="24dp">
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/tvWelcome"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="Xin chÃ o"
+        android:textColor="@color/colorTextPrimary"
+        android:textSize="22sp"
+        android:textStyle="bold" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="MÃ n hÃ¬nh chÃ­nh táº¡m thá»i cá»§a ThÃ nh viÃªn 1. CÃ¡c thÃ nh viÃªn khÃ¡c sáº½ gáº¯n chá»©c nÄƒng vÃ o Ä‘Ã¢y."
+        android:textColor="@color/colorTextSecondary"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btnStudentList"
+        style="@style/AppButton"
+        android:layout_marginTop="24dp"
+        android:text="Danh sÃ¡ch sinh viÃªn" />
+
+    <Button
+        android:id="@+id/btnChangePassword"
+        style="@style/AppButton"
+        android:layout_marginTop="12dp"
+        android:text="Äá»•i máº­t kháº©u" />
+
+    <Button
+        android:id="@+id/btnLogout"
+        style="@style/AppButton"
+        android:layout_marginTop="12dp"
+        android:text="ÄÄƒng xuáº¥t" />
+
+</LinearLayout>
+
+
+
