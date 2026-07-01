@@ -1,0 +1,536 @@
+Index: app/src/main/res/layout/activity_main.xml
+===================================================================
+diff --git a/app/src/main/res/layout/activity_main.xml b/app/src/main/res/layout/activity_main.xml
+deleted file mode 100644
+--- a/app/src/main/res/layout/activity_main.xml	(revision 3e906dbf1951f0266add9b978431bfd5df891dd6)
++++ /dev/null	(revision 3e906dbf1951f0266add9b978431bfd5df891dd6)
+@@ -1,19 +0,0 @@
+-<?xml version="1.0" encoding="utf-8"?>
+-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+-    xmlns:app="http://schemas.android.com/apk/res-auto"
+-    xmlns:tools="http://schemas.android.com/tools"
+-    android:id="@+id/main"
+-    android:layout_width="match_parent"
+-    android:layout_height="match_parent"
+-    tools:context=".MainActivity">
+-
+-    <TextView
+-        android:layout_width="wrap_content"
+-        android:layout_height="wrap_content"
+-        android:text="Hello World!"
+-        app:layout_constraintBottom_toBottomOf="parent"
+-        app:layout_constraintEnd_toEndOf="parent"
+-        app:layout_constraintStart_toStartOf="parent"
+-        app:layout_constraintTop_toTopOf="parent" />
+-
+-</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_student_detail.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_student_detail.xml b/app/src/main/res/layout/activity_student_detail.xml
+new file mode 100644
+--- /dev/null	(date 1782900579947)
++++ b/app/src/main/res/layout/activity_student_detail.xml	(date 1782900579947)
+@@ -0,0 +1,36 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:orientation="vertical"
++    android:padding="16dp">
++
++    <TextView
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:text="Chi Tiết Sinh Viên"
++        android:textSize="20sp"
++        android:textStyle="bold"
++        android:layout_gravity="center"
++        android:layout_marginBottom="24dp"/>
++
++    <TextView android:id="@+id/tvMssv" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="16sp" android:layout_marginBottom="8dp" text="MSSV: "/>
++    <TextView android:id="@+id/tvName" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="16sp" android:layout_marginBottom="8dp" text="Họ tên: "/>
++    <TextView android:id="@+id/tvEmail" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="16sp" android:layout_marginBottom="8dp" text="Email: "/>
++    <TextView android:id="@+id/tvClassName" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="16sp" android:layout_marginBottom="8dp" text="Lớp: "/>
++    <TextView android:id="@+id/tvGpa" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="16sp" android:layout_marginBottom="32dp" text="GPA: "/>
++
++    <Button
++        android:id="@+id/btnOpenEdit"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:text="Sửa Thông Tin"
++        android:layout_marginBottom="12dp"/>
++
++    <Button
++        android:id="@+id/btnDelete"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:text="Xóa Sinh Viên"
++        android:backgroundTint="#FF3B30"/>
++</LinearLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/example/studentmanagenment/student_manage/AddStudentActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/studentmanagenment/student_manage/AddStudentActivity.java b/app/src/main/java/com/example/studentmanagenment/student_manage/AddStudentActivity.java
+new file mode 100644
+--- /dev/null	(date 1782900548665)
++++ b/app/src/main/java/com/example/studentmanagenment/student_manage/AddStudentActivity.java	(date 1782900548665)
+@@ -0,0 +1,85 @@
++package com.example.studentmanagenment.student_manage;
++
++import android.os.Bundle;
++import android.util.Patterns;
++import android.widget.Button;
++import android.widget.EditText;
++import android.widget.Toast;
++import androidx.appcompat.app.AppCompatActivity;
++import com.example.studentmanagenment.R;
++import com.example.studentmanagenment.api.ApiClient;
++import com.example.studentmanagenment.api.ApiService;
++import com.example.studentmanagenment.api.Student;
++import java.util.Map;
++import retrofit2.Call;
++import retrofit2.Callback;
++import retrofit2.Response;
++
++public class AddStudentActivity extends AppCompatActivity {
++    private EditText etMssv, etName, etEmail, etClassName, etGpa;
++    private Button btnSave;
++    private ApiService apiService;
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        setContentView(R.layout.activity_add_student);
++
++        initViews();
++        apiService = ApiClient.getApiService();
++
++        btnSave.setOnClickListener(v -> {
++            if (validateInputs()) {
++                executeAddStudent();
++            }
++        });
++    }
++
++    private boolean validateInputs() {
++        String mssv = etMssv.getText().toString().trim();
++        String email = etEmail.getText().toString().trim();
++        if (mssv.isEmpty()) {
++            etMssv.setError("MSSV không được để trống");
++            return false;
++        }
++        if (!email.isEmpty() && !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
++            etEmail.setError("Email không đúng định dạng");
++            return false;
++        }
++        return true;
++    }
++
++    private void executeAddStudent() {
++        Student student = new Student();
++        student.setMssv(etMssv.getText().toString().trim());
++        student.setName(etName.getText().toString().trim());
++        student.setEmail(etEmail.getText().toString().trim());
++        student.setClassName(etClassName.getText().toString().trim());
++
++        String gpaStr = etGpa.getText().toString().trim();
++        student.setGpa(gpaStr.isEmpty() ? 0.0 : Double.parseDouble(gpaStr));
++
++        apiService.addStudent(student).enqueue(new Callback<Map<String, String>>() {
++            @Override
++            public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {
++                if (response.isSuccessful()) {
++                    Toast.makeText(AddStudentActivity.this, "Thêm sinh viên mới thành công!", Toast.LENGTH_SHORT).show();
++                    finish();
++                }
++            }
++            @Override
++            public void onFailure(Call<Map<String, String>> call, Throwable t) {
++                Toast.makeText(AddStudentActivity.this, "Lỗi kết nối", Toast.LENGTH_SHORT).show();
++            }
++        });
++    }
++
++    private void initViews() {
++        etMssv = findViewById(R.id.etMssv);
++        etName = findViewById(R.id.etName);
++        etEmail = findViewById(R.id.etEmail);
++        etGpa = findViewById(R.id.etGpa);
++        etClassName = findViewById(R.id.etClassName);
++        btnSave = findViewById(R.id.btnSave);
++    }
++}
+\ No newline at end of file
+Index: app/src/main/java/com/example/studentmanagenment/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.studentmanagenment;\r\n\r\nimport android.os.Bundle;\r\n\r\nimport androidx.activity.EdgeToEdge;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\nimport androidx.core.graphics.Insets;\r\nimport androidx.core.view.ViewCompat;\r\nimport androidx.core.view.WindowInsetsCompat;\r\n\r\npublic class MainActivity extends AppCompatActivity {\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        EdgeToEdge.enable(this);\r\n        setContentView(R.layout.activity_main);\r\n        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {\r\n            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());\r\n            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);\r\n            return insets;\r\n        });\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/studentmanagenment/MainActivity.java b/app/src/main/java/com/example/studentmanagenment/MainActivity.java
+--- a/app/src/main/java/com/example/studentmanagenment/MainActivity.java	(revision 3e906dbf1951f0266add9b978431bfd5df891dd6)
++++ b/app/src/main/java/com/example/studentmanagenment/MainActivity.java	(date 1782900691580)
+@@ -1,24 +1,77 @@
+-package com.example.studentmanagenment;
++package com.example.studentmanagenment.ui.main;
+ 
++import android.content.Intent;
+ import android.os.Bundle;
++import android.widget.Button;
++import android.widget.TextView;
+ 
+-import androidx.activity.EdgeToEdge;
+ import androidx.appcompat.app.AppCompatActivity;
+-import androidx.core.graphics.Insets;
+-import androidx.core.view.ViewCompat;
+-import androidx.core.view.WindowInsetsCompat;
++
++import com.example.studentmanagenment.R;
++import com.example.studentmanagenment.ui.auth.ChangePasswordActivity;
++import com.example.studentmanagenment.ui.auth.LoginActivity;
++import com.google.firebase.auth.FirebaseAuth;
++import com.google.firebase.auth.FirebaseUser;
+ 
+ public class MainActivity extends AppCompatActivity {
+ 
++    private TextView tvWelcome;
++    private Button btnStudentList, btnChangePassword, btnLogout;
++
++    private FirebaseAuth auth;
++
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+-        EdgeToEdge.enable(this);
+         setContentView(R.layout.activity_main);
+-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+-            return insets;
++
++        auth = FirebaseAuth.getInstance();
++
++        tvWelcome = findViewById(R.id.tvWelcome);
++        btnStudentList = findViewById(R.id.btnStudentList);
++        btnChangePassword = findViewById(R.id.btnChangePassword);
++        btnLogout = findViewById(R.id.btnLogout);
++
++        showCurrentUser();
++
++        btnStudentList.setOnClickListener(v -> {
++            // Sau nÃ y thÃ nh viÃªn 2 thay Ä‘oáº¡n nÃ y báº±ng mÃ n hÃ¬nh danh sÃ¡ch sinh viÃªn.
++            // VÃ­ dá»¥:
++            // startActivity(new Intent(this, StudentListActivity.class));
++        });
++
++        btnChangePassword.setOnClickListener(v -> {
++            Intent intent = new Intent(MainActivity.this, ChangePasswordActivity.class);
++            startActivity(intent);
+         });
++
++        btnLogout.setOnClickListener(v -> logout());
++    }
++
++    private void showCurrentUser() {
++        FirebaseUser user = auth.getCurrentUser();
++
++        if (user == null) {
++            goToLogin();
++            return;
++        }
++
++        String email = user.getEmail() != null ? user.getEmail() : "NgÆ°á»i dÃ¹ng";
++        tvWelcome.setText("Xin chÃ o, " + email);
++    }
++
++    private void logout() {
++        auth.signOut();
++        goToLogin();
+     }
+-}
+\ No newline at end of file
++
++    private void goToLogin() {
++        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
++        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
++        startActivity(intent);
++        finish();
++    }
++}
++
++
++
+Index: app/src/main/res/layout/activity_add_student.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_add_student.xml b/app/src/main/res/layout/activity_add_student.xml
+new file mode 100644
+--- /dev/null	(date 1782900510464)
++++ b/app/src/main/res/layout/activity_add_student.xml	(date 1782900510464)
+@@ -0,0 +1,63 @@
++<?xml version="1.0" encoding="utf-8"?>
++<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:orientation="vertical"
++    android:padding="16dp">
++
++    <TextView
++        android:layout_width="wrap_content"
++        android:layout_height="wrap_content"
++        android:text="Thêm Sinh Viên Mới"
++        android:textSize="20sp"
++        android:textStyle="bold"
++        android:layout_gravity="center"
++        android:layout_marginBottom="24dp"/>
++
++    <EditText
++        android:id="@+id/etMssv"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:hint="Mã số sinh viên (MSSV)"
++        android:inputType="text"
++        android:layout_marginBottom="12dp"/>
++
++    <EditText
++        android:id="@+id/etName"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:hint="Họ và tên"
++        android:inputType="textPersonName"
++        android:layout_marginBottom="12dp"/>
++
++    <EditText
++        android:id="@+id/etEmail"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:hint="Địa chỉ Email"
++        android:inputType="textEmailAddress"
++        android:layout_marginBottom="12dp"/>
++
++    <EditText
++        android:id="@+id/etGpa"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:hint="Điểm trung bình (GPA)"
++        android:inputType="numberDecimal"
++        android:layout_marginBottom="12dp"/>
++
++    <EditText
++        android:id="@+id/etClassName"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:hint="Lớp học"
++        android:inputType="text"
++        android:layout_marginBottom="24dp"/>
++
++    <Button
++        android:id="@+id/btnSave"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        android:text="Thêm"
++        android:textSize="16sp"/>
++</LinearLayout>
+\ No newline at end of file
+Index: app/src/main/java/com/example/studentmanagenment/api/ApiService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.studentmanagenment.api;\r\n\r\nimport java.util.List;\r\nimport java.util.Map;\r\n\r\nimport retrofit2.Call;\r\nimport retrofit2.http.Body;\r\nimport retrofit2.http.DELETE;\r\nimport retrofit2.http.GET;\r\nimport retrofit2.http.POST;\r\nimport retrofit2.http.PUT;\r\nimport retrofit2.http.Path;\r\n\r\npublic interface ApiService {\r\n\r\n    // 1. Lấy danh sách sinh viên (Thành viên 2 dùng)\r\n    @GET(\"students.json\")\r\n    Call<Map<String, Student>> getStudents();\r\n\r\n    // 2. Thêm một sinh viên mới (Thành viên 3 dùng)\r\n    @POST(\"students.json\")\r\n    Call<Map<String, String>> addStudent(@Body Student student);\r\n\r\n    // 3. Cập nhật thông tin sinh viên theo ID (Thành viên 3 hoặc 4 dùng)\r\n    @PUT(\"students/{id}.json\")\r\n    Call<Student> updateStudent(@Path(\"id\") String id, @Body Student student);\r\n\r\n    // 4. Xóa sinh viên (Thành viên 3 dùng)\r\n    @DELETE(\"students/{id}.json\")\r\n    Call<Void> deleteStudent(@Path(\"id\") String id);\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/studentmanagenment/api/ApiService.java b/app/src/main/java/com/example/studentmanagenment/api/ApiService.java
+--- a/app/src/main/java/com/example/studentmanagenment/api/ApiService.java	(revision 3e906dbf1951f0266add9b978431bfd5df891dd6)
++++ b/app/src/main/java/com/example/studentmanagenment/api/ApiService.java	(date 1782897597076)
+@@ -17,6 +17,10 @@
+     @GET("students.json")
+     Call<Map<String, Student>> getStudents();
+ 
++    // Bổ sung thêm hàm này vào bên trong interface ApiService của bạn
++    @GET("students/{id}.json")
++    Call<Student> getStudentById(@Path("id") String id);
++
+     // 2. Thêm một sinh viên mới (Thành viên 3 dùng)
+     @POST("students.json")
+     Call<Map<String, String>> addStudent(@Body Student student);
+Index: app/src/main/java/com/example/studentmanagenment/student_manage/AddEditStudentActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/studentmanagenment/student_manage/AddEditStudentActivity.java b/app/src/main/java/com/example/studentmanagenment/student_manage/AddEditStudentActivity.java
+new file mode 100644
+--- /dev/null	(date 1782900491426)
++++ b/app/src/main/java/com/example/studentmanagenment/student_manage/AddEditStudentActivity.java	(date 1782900491426)
+@@ -0,0 +1,160 @@
++package com.example.studentmanagenment.student_manage;
++
++import android.os.Bundle;
++import android.util.Log;
++import android.util.Patterns;
++import android.widget.Button;
++import android.widget.EditText;
++import android.widget.Toast;
++import androidx.appcompat.app.AppCompatActivity;
++import com.example.studentmanagenment.R;
++import com.example.studentmanagenment.api.ApiClient;
++import com.example.studentmanagenment.api.ApiService;
++import com.example.studentmanagenment.api.Student;
++import java.util.Map;
++import retrofit2.Call;
++import retrofit2.Callback;
++import retrofit2.Response;
++
++public class AddEditStudentActivity extends AppCompatActivity {
++    // Thay thế etPhone bằng etGpa
++    private EditText etMssv, etName, etEmail, etClassName, etGpa;
++    private Button btnSave;
++    private ApiService apiService;
++    private String studentId = null;
++
++    @Override
++    protected void onCreate(Bundle savedInstanceState) {
++        super.onCreate(savedInstanceState);
++        setContentView(R.layout.activity_add_student);
++
++        initViews();
++        // Sửa lại cho đúng tên hàm getApiService() trong file ApiClient của bạn
++        apiService = ApiClient.getApiService();
++
++        if (getIntent().hasExtra("STUDENT_ID")) {
++            studentId = getIntent().getStringExtra("STUDENT_ID");
++            fillDataForEdit();
++        }
++
++        btnSave.setOnClickListener(v -> {
++            if (validateInputs()) {
++                saveStudent();
++            }
++        });
++    }
++
++    private boolean validateInputs() {
++        String mssv = etMssv.getText().toString().trim();
++        String email = etEmail.getText().toString().trim();
++        String gpaStr = etGpa.getText().toString().trim();
++
++        if (mssv.isEmpty()) {
++            etMssv.setError("MSSV không được để trống");
++            return false;
++        }
++        if (!email.isEmpty() && !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
++            etEmail.setError("Email không đúng định dạng");
++            return false;
++        }
++        if (!gpaStr.isEmpty()) {
++            try {
++                double gpa = Double.parseDouble(gpaStr);
++                if (gpa < 0 || gpa > 10) {
++                    etGpa.setError("GPA phải nằm trong khoảng từ 0 - 10");
++                    return false;
++                }
++            } catch (NumberFormatException e) {
++                etGpa.setError("GPA không hợp lệ");
++                return false;
++            }
++        }
++        return true;
++    }
++
++    private void saveStudent() {
++        Student student = new Student();
++        student.setMssv(etMssv.getText().toString().trim());
++        student.setName(etName.getText().toString().trim());
++        student.setEmail(etEmail.getText().toString().trim());
++        student.setClassName(etClassName.getText().toString().trim());
++
++        // Xử lý nạp điểm GPA (mặc định là 0 nếu để trống)
++        String gpaStr = etGpa.getText().toString().trim();
++        if (!gpaStr.isEmpty()) {
++            student.setGpa(Double.parseDouble(gpaStr));
++        } else {
++            student.setGpa(0.0);
++        }
++
++        if (studentId == null) {
++            // CHỨC NĂNG THÊM MỚI [cite: 1]
++            apiService.addStudent(student).enqueue(new Callback<Map<String, String>>() {
++                @Override
++                public void onResponse(Call<Map<String, String>> call, Response<Map<String, String>> response) {
++                    if (response.isSuccessful()) {
++                        Toast.makeText(AddEditStudentActivity.this, "Thêm thành công!", Toast.LENGTH_SHORT).show();
++                        finish();
++                    }
++                }
++                @Override
++                public void onFailure(Call<Map<String, String>> call, Throwable t) {
++                    Toast.makeText(AddEditStudentActivity.this, "Lỗi kết nối", Toast.LENGTH_SHORT).show();
++                }
++            });
++        } else {
++            // CHỨC NĂNG CẬP NHẬT [cite: 1]
++            apiService.updateStudent(studentId, student).enqueue(new Callback<Student>() {
++                @Override
++                public void onResponse(Call<Student> call, Response<Student> response) {
++                    if (response.isSuccessful()) {
++                        Toast.makeText(AddEditStudentActivity.this, "Cập nhật thành công!", Toast.LENGTH_SHORT).show();
++                        finish();
++                    }
++                }
++                @Override
++                public void onFailure(Call<Student> call, Throwable t) {
++                    Toast.makeText(AddEditStudentActivity.this, "Lỗi cập nhật dữ liệu", Toast.LENGTH_SHORT).show();
++                }
++            });
++        }
++    }
++
++    // Hàm bổ trợ đọc dữ liệu cũ đổ lên Form khi ở chế độ Sửa (Tránh lỗi thiếu method)
++    private void fillDataForEdit() {
++        Log.d("EDIT_MODE", "Đang sửa sinh viên với ID: " + studentId);
++
++        // Thực hiện gọi mạng để lấy thông tin chi tiết sinh viên dựa theo ID
++        apiService.getStudentById(studentId).enqueue(new Callback<Student>() {
++            @Override
++            public void onResponse(Call<Student> call, Response<Student> response) {
++                if (response.isSuccessful() && response.body() != null) {
++                    Student currentStudent = response.body();
++
++                    // Điền dữ liệu nhận được vào form để người dùng chỉnh sửa
++                    etMssv.setText(currentStudent.getMssv());
++                    etName.setText(currentStudent.getName());
++                    etEmail.setText(currentStudent.getEmail());
++                    etClassName.setText(currentStudent.getClassName());
++                    etGpa.setText(String.valueOf(currentStudent.getGpa()));
++                } else {
++                    Toast.makeText(AddEditStudentActivity.this, "Không thể tải thông tin sinh viên", Toast.LENGTH_SHORT).show();
++                }
++            }
++
++            @Override
++            public void onFailure(Call<Student> call, Throwable t) {
++                Toast.makeText(AddEditStudentActivity.this, "Lỗi mạng: " + t.getMessage(), Toast.LENGTH_SHORT).show();
++            }
++        });
++    }
++
++    private void initViews() {
++        etMssv = findViewById(R.id.etMssv);
++        etName = findViewById(R.id.etName);
++        etEmail = findViewById(R.id.etEmail);
++        etGpa = findViewById(R.id.etGpa);
++        etClassName = findViewById(R.id.etClassName);
++        btnSave = findViewById(R.id.btnSave);
++    }
++}
+\ No newline at end of file
