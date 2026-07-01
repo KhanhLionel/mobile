@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginVertical="6dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="3dp"
+    app:cardBackgroundColor="#FFFFFF">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:id="@+id/layoutButtons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/btnProfile"
+                android:layout_width="75dp"
+                android:layout_height="36dp"
+                android:backgroundTint="#FFFFFF"
+                android:textColor="#3F51B5"
+                android:padding="0dp"
+                android:text="HỒ SƠ"
+                android:textSize="12sp"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"/>
+
+            <Button
+                android:id="@+id/btnEnterScore"
+                android:layout_width="85dp"
+                android:layout_height="36dp"
+                android:backgroundTint="#3F51B5"
+                android:textColor="#FFFFFF"
+                android:padding="0dp"
+                android:text="Nhập Điểm"
+                android:textSize="12sp"
+                android:layout_marginLeft="6dp"
+                style="@style/Widget.MaterialComponents.Button"/>
+
+            <ImageView
+                android:id="@+id/btnDelete"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:src="@android:drawable/ic_menu_delete"
+                android:contentDescription="Xóa"
+                android:layout_marginLeft="8dp"
+                app:tint="#EF5350"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_toLeftOf="@id/layoutButtons"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="8dp">
+
+            <TextView
+                android:id="@+id/tvStudentName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tên Sinh Viên"
+                android:textColor="#212121"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
+            <TextView
+                android:id="@+id/tvStudentId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="MSSV: ---"
+                android:textColor="#757575"
+                android:textSize="12sp"
+                android:layout_marginTop="2dp"/>
+
+            <TextView
+                android:id="@+id/tvScoreDTB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="GPA: 0.0"
+                android:textColor="#E65100"
+                android:textStyle="bold"
+                android:textSize="13sp"
+                android:layout_marginTop="4dp"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

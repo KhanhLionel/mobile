@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@android:color/transparent"
+    android:padding="20dp">
+
+    <!-- KHỐI CONTAINER CHÍNH BO GÓC -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#FFFFFF"
+        android:padding="24dp">
+
+        <!-- TIÊU ĐỀ DIALOG -->
+        <TextView
+            android:id="@+id/tvDialogSubjectName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cập nhật điểm số"
+            android:textColor="#1E293B"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- Ô NHẬP ĐIỂM QUÁ TRÌNH (HINT CŨ: PROCESS) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Điểm Quá Trình (20%)"
+            android:textColor="#64748B"
+            android:textSize="13sp"
+            android:textStyle="bold"/>
+        <EditText
+            android:id="@+id/edtProcessScore"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="16dp"
+            android:background="@android:drawable/editbox_background"
+            android:paddingHorizontal="12dp"
+            android:inputType="numberDecimal"
+            android:hint="Nhập điểm hệ 10"
+            android:textSize="14sp"
+            android:textColor="#1E293B"/>
+
+        <!-- Ô NHẬP ĐIỂM GIỮA KỲ (HINT CỦA MIDTERM) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Điểm Giữa Kỳ (30%)"
+            android:textColor="#64748B"
+            android:textSize="13sp"
+            android:textStyle="bold"/>
+        <EditText
+            android:id="@+id/edtMidtermScore"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="16dp"
+            android:background="@android:drawable/editbox_background"
+            android:paddingHorizontal="12dp"
+            android:inputType="numberDecimal"
+            android:hint="Nhập điểm hệ 10"
+            android:textSize="14sp"
+            android:textColor="#1E293B"/>
+
+        <!-- Ô NHẬP ĐIỂM CUỐI KỲ (HINT CỦA FINAL) -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Điểm Cuối Kỳ (50%)"
+            android:textColor="#64748B"
+            android:textSize="13sp"
+            android:textStyle="bold"/>
+        <EditText
+            android:id="@+id/edtFinalScore"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="24dp"
+            android:background="@android:drawable/editbox_background"
+            android:paddingHorizontal="12dp"
+            android:inputType="numberDecimal"
+            android:hint="Nhập điểm hệ 10"
+            android:textSize="14sp"
+            android:textColor="#1E293B"/>
+
+        <!-- KHỐI HAI NÚT HÀNH ĐỘNG DƯỚI CÙNG -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end">
+
+            <!-- Nút Hủy (Outlined/Text không viền) -->
+            <Button
+                android:id="@+id/btnCancelDialog"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="Hủy"
+                android:textColor="#64748B"
+                android:textSize="14sp"
+                android:layout_marginEnd="8dp"/>
+
+            <!-- Nút Lưu Điểm (Đặc Indigo đồng bộ) -->
+            <Button
+                android:id="@+id/btnSubmitScore"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="Lưu Điểm"
+                android:textSize="14sp"
+                android:backgroundTint="#3F51B5"
+                android:textColor="#FFFFFF"
+                app:cornerRadius="8dp"
+                android:paddingHorizontal="16dp"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
