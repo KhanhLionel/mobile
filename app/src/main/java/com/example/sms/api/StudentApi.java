@@ -88,4 +88,58 @@ public class StudentApi {
                 .addOnSuccessListener(aVoid -> callback.onSuccess(null))
                 .addOnFailureListener(e -> callback.onFailure(e));
     }
+
+    public void recalculateStudentGpa(String studentId, ApiCallback<Void> callback) {
+        DatabaseReference studentSubjectsRef = FirebaseDatabase.getInstance().getReference("Student_Subjects");
+        studentSubjectsRef.child(studentId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                List<String> subjectIds = new ArrayList<>();
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    subjectIds.add(data.getKey());
+                }
+
+                if (subjectIds.isEmpty()) {
+                    updateGpaTong(studentId, 0.0, callback);
+                    return;
+                }
+
+                gradesRef.child(studentId).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot gradesSnapshot) {
+                        double totalGpa = 0.0;
+                        int count = subjectIds.size();
+                        
+                        for (String subjId : subjectIds) {
+                            if (gradesSnapshot.hasChild(subjId)) {
+                                Grade g = gradesSnapshot.child(subjId).getValue(Grade.class);
+                                if (g != null) {
+                                    totalGpa += g.getGpaMon();
+                                }
+                            }
+                        }
+                        
+                        double averageGpa = count > 0 ? totalGpa / count : 0.0;
+                        updateGpaTong(studentId, averageGpa, callback);
+                    }
+                    
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        callback.onFailure(error.toException());
+                    }
+                });
+            }
+            
+            @Override
+            public void onCancelled(DatabaseError error) {
+                callback.onFailure(error.toException());
+            }
+        });
+    }
+    
+    private void updateGpaTong(String studentId, double newGpa, ApiCallback<Void> callback) {
+        studentsRef.child(studentId).child("gpaTong").setValue(newGpa)
+            .addOnSuccessListener(aVoid -> callback.onSuccess(null))
+            .addOnFailureListener(e -> callback.onFailure(e));
+    }
 }

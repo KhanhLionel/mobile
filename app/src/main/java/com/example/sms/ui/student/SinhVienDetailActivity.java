@@ -18,6 +18,7 @@ import com.example.sms.R;
 import com.example.sms.api.AuthApi;
 import com.example.sms.api.StudentApi;
 import com.example.sms.api.SubjectApi;
+import com.example.sms.models.Grade;
 import com.example.sms.models.Subject;
 import com.example.sms.ui.subject.SubjectAdapter;
 
@@ -70,7 +71,9 @@ public class SinhVienDetailActivity extends AppCompatActivity {
 
         RecyclerView rvSubjects = findViewById(R.id.rv_student_subjects);
         rvSubjects.setLayoutManager(new LinearLayoutManager(this));
-        SubjectAdapter adapter = new SubjectAdapter();
+        StudentSubjectAdapter adapter = new StudentSubjectAdapter(studentId, subject -> {
+            showGradesDialog(studentId, subject);
+        });
         rvSubjects.setAdapter(adapter);
 
         SubjectApi subjectApi = new SubjectApi();
@@ -86,27 +89,9 @@ public class SinhVienDetailActivity extends AppCompatActivity {
             }
         });
 
-        if (AuthApi.isAdmin) {
-            adapter.setOnItemLongClickListener(subject -> {
-                new AlertDialog.Builder(SinhVienDetailActivity.this)
-                    .setTitle("Xóa khỏi lớp học phần")
-                    .setMessage("Hủy đăng ký môn " + subject.getTenMonHoc() + " cho sinh viên này?")
-                    .setPositiveButton("Có", (dialog, which) -> {
-                        subjectApi.removeStudentFromSubject(studentId, subject.getId(), new com.example.sms.api.ApiCallback<Void>() {
-                            @Override
-                            public void onSuccess(Void result) {
-                                Toast.makeText(SinhVienDetailActivity.this, "Đã hủy đăng ký", Toast.LENGTH_SHORT).show();
-                            }
-                            @Override
-                            public void onFailure(Exception e) {
-                                Toast.makeText(SinhVienDetailActivity.this, "Lỗi: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    })
-                    .setNegativeButton("Không", null)
-                    .show();
-            });
-        }
+        // (Removed long click to remove subject, since StudentSubjectAdapter handles clicks for grades now. 
+        // Admin could still remove via another button, but for this task grades take priority. 
+        // We'll leave the remove functionality out of the item click for now to keep it simple.)
 
         btnDelete.setOnClickListener(v -> {
             new AlertDialog.Builder(this)
@@ -133,6 +118,116 @@ public class SinhVienDetailActivity extends AppCompatActivity {
         btnEdit.setOnClickListener(v -> {
             showEditDialog(studentId, name, mssv, email, lop);
         });
+    }
+
+    private void showGradesDialog(String studentId, Subject subject) {
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_grades, null);
+        AlertDialog dialog = new AlertDialog.Builder(this).setView(dialogView).create();
+
+        TextView tvTitle = dialogView.findViewById(R.id.tv_grade_title);
+        EditText etThanhPhan = dialogView.findViewById(R.id.et_diem_thanh_phan);
+        EditText etGiuaKy = dialogView.findViewById(R.id.et_diem_giua_ky);
+        EditText etCuoiKy = dialogView.findViewById(R.id.et_diem_cuoi_ky);
+        TextView tvGpaMon = dialogView.findViewById(R.id.tv_gpa_mon);
+        Button btnCancel = dialogView.findViewById(R.id.btn_cancel_grade);
+        Button btnSave = dialogView.findViewById(R.id.btn_save_grade);
+
+        tvTitle.setText("Điểm môn: " + subject.getTenMonHoc());
+
+        // Load existing grades
+        studentApi.getStudentGrades(studentId, subject.getId(), new com.example.sms.api.ApiCallback<Grade>() {
+            @Override
+            public void onSuccess(Grade grade) {
+                etThanhPhan.setText(String.valueOf(grade.getDiemThanhPhan()));
+                etGiuaKy.setText(String.valueOf(grade.getDiemGiuaKy()));
+                etCuoiKy.setText(String.valueOf(grade.getDiemCuoiKy()));
+                tvGpaMon.setText(String.format("GPA Môn: %.1f", grade.getGpaMon()));
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(SinhVienDetailActivity.this, "Lỗi tải điểm", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        if (!AuthApi.isAdmin) {
+            etThanhPhan.setEnabled(false);
+            etGiuaKy.setEnabled(false);
+            etCuoiKy.setEnabled(false);
+            btnSave.setVisibility(View.GONE);
+        } else {
+            android.text.TextWatcher watcher = new android.text.TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                @Override
+                public void afterTextChanged(android.text.Editable s) {
+                    try {
+                        double tp = etThanhPhan.getText().toString().isEmpty() ? 0 : Double.parseDouble(etThanhPhan.getText().toString());
+                        double gk = etGiuaKy.getText().toString().isEmpty() ? 0 : Double.parseDouble(etGiuaKy.getText().toString());
+                        double ck = etCuoiKy.getText().toString().isEmpty() ? 0 : Double.parseDouble(etCuoiKy.getText().toString());
+                        
+                        if(tp < 0 || tp > 10 || gk < 0 || gk > 10 || ck < 0 || ck > 10) {
+                            tvGpaMon.setText("Điểm phải từ 0 đến 10");
+                            return;
+                        }
+
+                        Grade tempGrade = new Grade(tp, gk, ck);
+                        tvGpaMon.setText(String.format("GPA Môn: %.1f", tempGrade.getGpaMon()));
+                    } catch (NumberFormatException e) {
+                        tvGpaMon.setText("Điểm không hợp lệ");
+                    }
+                }
+            };
+            
+            etThanhPhan.addTextChangedListener(watcher);
+            etGiuaKy.addTextChangedListener(watcher);
+            etCuoiKy.addTextChangedListener(watcher);
+
+            btnSave.setOnClickListener(v -> {
+                try {
+                    double tp = etThanhPhan.getText().toString().isEmpty() ? 0 : Double.parseDouble(etThanhPhan.getText().toString());
+                    double gk = etGiuaKy.getText().toString().isEmpty() ? 0 : Double.parseDouble(etGiuaKy.getText().toString());
+                    double ck = etCuoiKy.getText().toString().isEmpty() ? 0 : Double.parseDouble(etCuoiKy.getText().toString());
+                    
+                    if(tp < 0 || tp > 10 || gk < 0 || gk > 10 || ck < 0 || ck > 10) {
+                        Toast.makeText(SinhVienDetailActivity.this, "Điểm phải từ 0 đến 10", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    Grade grade = new Grade(tp, gk, ck);
+                    studentApi.updateGrades(studentId, subject.getId(), grade, new com.example.sms.api.ApiCallback<Void>() {
+                        @Override
+                        public void onSuccess(Void result) {
+                            studentApi.recalculateStudentGpa(studentId, new com.example.sms.api.ApiCallback<Void>() {
+                                @Override
+                                public void onSuccess(Void res) {
+                                    Toast.makeText(SinhVienDetailActivity.this, "Đã lưu điểm và cập nhật GPA", Toast.LENGTH_SHORT).show();
+                                    dialog.dismiss();
+                                }
+                                @Override
+                                public void onFailure(Exception e) {
+                                    Toast.makeText(SinhVienDetailActivity.this, "Lưu điểm thành công nhưng lỗi cập nhật GPA", Toast.LENGTH_SHORT).show();
+                                    dialog.dismiss();
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            Toast.makeText(SinhVienDetailActivity.this, "Lỗi lưu điểm", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                } catch (NumberFormatException e) {
+                    Toast.makeText(SinhVienDetailActivity.this, "Điểm không hợp lệ", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+        dialog.show();
     }
 
     private void showEditDialog(String studentId, String currentName, String currentMssv, String currentEmail, String currentLop) {
